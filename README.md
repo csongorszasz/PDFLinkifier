@@ -1,2 +1,2 @@
 # PDFLinkifier
-Egy PDF tartalomjegyzékét ellátja belső linkekkel
+Egy vagy több PDF tartalomjegyzékét ellátja belső linkekkel
