@@ -1,2 +1,2 @@
 # PDFLinkifier
-Egy vagy több PDF tartalomjegyzékét ellátja belső linkekkel.
+PDF formátumú kottás könyvek tartalomjegyzékét ellátja belső linkekkel, illetve kereshetővé teszi a dalok fejléceit (címeit).
