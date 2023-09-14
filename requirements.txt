@@ -1,4 +1,5 @@
 PyQt5
+pyqtspinner
 pytesseract
 opencv-python
 PyMuPDF
