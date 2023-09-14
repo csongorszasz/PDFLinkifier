@@ -42,9 +42,9 @@ def linkify(filepath: str):
         img = cv2.imdecode(np.frombuffer(pixmap.tobytes(), dtype=np.uint8), cv2.IMREAD_GRAYSCALE)  # load it in OpenCV
         img = preprocess_image(img)  # prepare image for OCR
 
-        cv2.imshow("Image", img)
-        cv2.waitKey(0)
+        # cv2.imshow("Image", img)
+        # cv2.waitKey(0)
 
         page_num += 1
 
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()

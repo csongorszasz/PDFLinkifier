@@ -34,7 +34,6 @@ class MainWindow(QMainWindow):
         if len(self.chosen_files) == 0:
             self.print_to_statusbar("Nincs kiválasztott fájl", color="red")
         else:
-            self.centralWidget().setEnabled(False)
             spinner = WaitingSpinner(
                 parent=self.ok_button,
                 roundness=100.0,
@@ -46,19 +45,11 @@ class MainWindow(QMainWindow):
                 speed=1.5707963267948966,
                 color=QColor(0, 0, 0)
             )
-            spinner.start()
-            self.ok_button.setText("")
 
-            i = 1
-            for file in self.chosen_files:
-                self.print_to_statusbar(f"{i}/{len(self.chosen_files)} {get_filename_from_path(file)}", hold_time=0)
-                linkifier.linkify(file)
-                i += 1
-
+            self.start_processing(spinner)
+            self.process_files()
             self.print_to_statusbar("Siker!", color="green")
-
-            spinner.stop()
-            self.reset()
+            self.reset(spinner)
 
     def print_to_statusbar(self, msg, color="black", hold_time=3000):
         """hold_time is in miliseconds"""
@@ -66,11 +57,25 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(msg, hold_time)
         self.statusBar().repaint()
 
-    def reset(self):
+    def start_processing(self, spinner: WaitingSpinner):
+        self.centralWidget().setEnabled(False)
+        spinner.start()
+        self.ok_button.setText("")
+
+    def reset(self, spinner: WaitingSpinner):
         self.chosen_files = []
-        self.ok_button.setText("OK")
         self.browsed_filename_label.setText("0 fájl")
+        self.ok_button.setText("OK")
+        spinner.stop()
         self.centralWidget().setEnabled(True)
+
+    def process_files(self):
+        i = 1
+        for file in self.chosen_files:
+            self.print_to_statusbar(f"{i}/{len(self.chosen_files)} {get_filename_from_path(file)}", hold_time=0)
+            linkifier.linkify(file)
+            i += 1
+
 
 if __name__ == "__main__":
     app = QApplication([])
