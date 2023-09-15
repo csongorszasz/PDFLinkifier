@@ -11,6 +11,20 @@ def get_filename_from_path(path):
     return path.split('/')[-1]
 
 
+def create_spinner(parent=None, roundness=100.0, fade=30.0, radius=3, lines=125, line_length=5, line_width=1, speed=1.57, color=QColor(0,0,0)) -> WaitingSpinner:
+    return WaitingSpinner(
+        parent=parent,
+        roundness=roundness,
+        fade=fade,
+        radius=radius,
+        lines=lines,
+        line_length=line_length,
+        line_width=line_width,
+        speed=speed,
+        color=color
+    )
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -34,18 +48,7 @@ class MainWindow(QMainWindow):
         if len(self.chosen_files) == 0:
             self.print_to_statusbar("Nincs kiválasztott fájl", color="red")
         else:
-            spinner = WaitingSpinner(
-                parent=self.ok_button,
-                roundness=100.0,
-                fade=30.0,
-                radius=3,
-                lines=125,
-                line_length=5,
-                line_width=1,
-                speed=1.5707963267948966,
-                color=QColor(0, 0, 0)
-            )
-
+            spinner = create_spinner(self.ok_button)
             self.start_processing(spinner)
             self.process_files()
             self.print_to_statusbar("Siker!", color="green")
