@@ -3,7 +3,6 @@ import pytesseract
 import fitz
 import numpy as np
 import math
-from imutils.object_detection import non_max_suppression
 
 import my
 
@@ -34,16 +33,20 @@ def linkify(filepath: str):
     doc = fitz.open(filepath)  # open the pdf
     page_num = 1
 
-    pages = [
-        # doc[0],
-        # doc[4],
-        doc[26]
-    ]
-    for page in pages:
+    # pages = [
+    #     doc[0],
+    #     doc[4],
+    #     doc[26]
+    # ]
+    for page in doc:
         pixmap = page.get_pixmap()  # render page to an image
         img = cv2.imdecode(np.frombuffer(pixmap.tobytes(), dtype=np.uint8), cv2.IMREAD_COLOR)  # load image
 
         titles = my.ocr.get_titles(img)
+        print(titles)
+
+        cv2.imshow("img", img)
+        cv2.waitKey(2)
 
         page_num += 1
 
