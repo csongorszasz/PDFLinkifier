@@ -33,20 +33,30 @@ def linkify(filepath: str):
     doc = fitz.open(filepath)  # open the pdf
     page_num = 1
 
-    # pages = [
-    #     doc[0],
-    #     doc[4],
-    #     doc[26]
-    # ]
+    pages = [
+        # doc[14],
+        # doc[17],
+        # doc[21],
+        # doc[49],
+        # doc[71],
+        # doc[83],
+        # doc[85],
+        # doc[100],
+        doc[115],
+        # doc[116],
+        # doc[119],
+        # doc[141],
+        # doc[143]
+    ]
     for page in doc:
         pixmap = page.get_pixmap()  # render page to an image
         img = cv2.imdecode(np.frombuffer(pixmap.tobytes(), dtype=np.uint8), cv2.IMREAD_COLOR)  # load image
 
         titles = my.ocr.get_titles(img)
-        print(titles)
+        print(page_num, titles)
 
-        cv2.imshow("img", img)
-        cv2.waitKey(2)
+        # cv2.imshow("img", img)
+        # cv2.waitKey(0)
 
         page_num += 1
 

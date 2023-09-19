@@ -7,6 +7,7 @@ import my
 
 def extract_rois_from_img(img):
     prepped = my.preprocess.for_large_contours(img)
+    # cv2.imshow("prepped", prepped)
     cnts = get_large_contours(prepped)
     rois = get_rois_from_cnts(img, cnts)
     return rois
@@ -14,12 +15,16 @@ def extract_rois_from_img(img):
 
 def get_rois_from_cnts(img, cnts):
     rois = []
-    img_w = img.shape[1]
+    img_w, img_h = img.shape[1], img.shape[0]
     for cnt in cnts:
         x, y, w, h = cv2.boundingRect(cnt)
-        if 40 < w < img_w-20 and 15 < h < 100:
-            # cv2.rectangle(img, (x, y), (x + w, y + h), (36, 255, 12), 2)
-            rois.append(img[y-10 if y-10>=0 else 0:y+h+5, x:x+w])
+        if 40 < w < img_w-20 and 13 < h < 100:
+            extension_down = y+h+5 if y+h+5<img_h else y+h
+            extension_up = y-10 if y-10>=0 else 0
+            rois.append(img[extension_up:extension_down, x:x+w])
+            # cv2.rectangle(img, (x, y), (x + w, y + h), (36, 255, 12), 2)  # display cnt
+            # cv2.imshow("roi", rois[-1])
+            # cv2.waitKey(0)
     return rois
 
 
@@ -50,7 +55,7 @@ def resize_img_with_borders_to_multiple_of_x(img, x: int):
 def resize_img_with_stretching_to_multiple_of_x(img, x: int):
     h, w = img.shape[:2]
     if w % x == 0 and h % x == 0:
-        return img
+        return img, 1, 1
 
     target_w = (w + x) - ((w + x) % x)  # find the closest larger number than "w" divisible by x
     target_h = (h + x) - ((h + x) % x)  # find the closest larger number than "h" divisible by x
@@ -102,6 +107,7 @@ def img_contains_text(img):
             w_bbox = x_data_1[x] + x_data_3[x]
 
             if w_bbox > 40 and h_bbox > 15:
+                # print(w_bbox, h_bbox)
                 return True
 
             # FOR BOUNDING BOXES

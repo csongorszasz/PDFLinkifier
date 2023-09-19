@@ -4,6 +4,7 @@ import math
 from typing import Sequence
 
 
+# NOT USED
 def get_straight_rect_from_cnt(largest_cnt):
     """
     Returns the topleft coordinate, witdth and height of a straight rectangle retrieved from a contour.
@@ -13,6 +14,7 @@ def get_straight_rect_from_cnt(largest_cnt):
     return cv2.boundingRect(largest_cnt)
 
 
+# NOT USED
 def get_rotated_rect_from_cnt(largest_cnt) -> np.ndarray:
     """
     Returns the corners of a rotated rectangle retrieved from a contour.
@@ -25,6 +27,7 @@ def get_rotated_rect_from_cnt(largest_cnt) -> np.ndarray:
     return box
 
 
+# NOT USED
 def get_sub_image_from_rect(src, center, size):
     cx, cy = center
     w, h = int(size[1]), int(size[0])
@@ -44,6 +47,7 @@ def get_sub_image_from_rect(src, center, size):
     return src[extended_y_up:topleft_y+h+7, topleft_x:topleft_x+w]
 
 
+# NOT USED
 def crop_to_rotated_rect(src, rect):
     """Returns a cropped image."""
     center, size, angle = rect
@@ -59,6 +63,7 @@ def crop_to_rotated_rect(src, rect):
     return get_sub_image_from_rect(dst, center, size)
 
 
+# NOT USED
 def get_title_min_area_rect(cv_image) -> tuple[Sequence[float], Sequence[int], float]:
     """Returns the minimum area rectangle that covers the title."""
     img = cv_image.copy()

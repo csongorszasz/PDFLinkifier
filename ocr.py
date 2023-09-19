@@ -40,14 +40,17 @@ def put_bboxes(cv_image):
 def get_titles(img) -> list[str]:
     rois = my.img.extract_rois_from_img(img)
     titles = []
+    i = 1
     for roi in rois:
         prepped = my.preprocess.for_line_of_text(roi)
+        prepped_h, prepped_w = prepped.shape[:2]
         # cv2.imshow("prepped", prepped)
-        if my.img.img_contains_text(prepped):
+        if my.img.img_contains_text(prepped[5:prepped_h-5, :]):
             title = my.ocr.get_title_as_line(prepped).strip()
             titles.append(title)
 
-            cv2.imshow("selected", prepped)
+            # cv2.imshow(f"selected_{i}", prepped)
+            i += 1
         # cv2.waitKey(0)
 
     return titles
