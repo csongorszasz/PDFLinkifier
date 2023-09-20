@@ -7,6 +7,14 @@ import math
 import my
 
 
+def add_contents_page_to_doc(titles: tuple[int, str]):
+    pass
+
+
+def add_titles_to_doc(titles: tuple[int, str]):
+    pass
+
+
 def linkify(filepath: str):
     """
     Add a custom contents section to the beginning of a given PDF file, and make song titles searchable.
@@ -34,6 +42,7 @@ def linkify(filepath: str):
     page_num = 1
 
     pages = [
+        doc[7],
         # doc[14],
         # doc[17],
         # doc[21],
@@ -42,25 +51,31 @@ def linkify(filepath: str):
         # doc[83],
         # doc[85],
         # doc[100],
-        doc[115],
+        # doc[115],
         # doc[116],
         # doc[119],
         # doc[141],
         # doc[143]
     ]
+
+    titles = []  # a list of (page_num, title) pairs
     for page in doc:
         pixmap = page.get_pixmap()  # render page to an image
         img = cv2.imdecode(np.frombuffer(pixmap.tobytes(), dtype=np.uint8), cv2.IMREAD_COLOR)  # load image
 
-        titles = my.ocr.get_titles(img)
-        print(page_num, titles)
+        titles_results = my.ocr.get_titles(img)
+        for title in titles_results:
+            title = title[0].upper() + title[1:]
+            titles.append((page_num, title))
 
         # cv2.imshow("img", img)
         # cv2.waitKey(0)
-
         page_num += 1
+    # cv2.destroyAllWindows()
 
-    cv2.destroyAllWindows()
+    for (page_num, title) in titles:
+        print(page_num, title)
+
 
 
 

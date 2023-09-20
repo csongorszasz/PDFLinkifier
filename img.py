@@ -18,13 +18,17 @@ def get_rois_from_cnts(img, cnts):
     img_w, img_h = img.shape[1], img.shape[0]
     for cnt in cnts:
         x, y, w, h = cv2.boundingRect(cnt)
-        if 40 < w < img_w-20 and 13 < h < 100:
-            extension_down = y+h+5 if y+h+5<img_h else y+h
-            extension_up = y-10 if y-10>=0 else 0
-            rois.append(img[extension_up:extension_down, x:x+w])
-            # cv2.rectangle(img, (x, y), (x + w, y + h), (36, 255, 12), 2)  # display cnt
-            # cv2.imshow("roi", rois[-1])
-            # cv2.waitKey(0)
+        if x > img_w//2 or y > img_h-150:
+            continue
+        if (w < 40 or w > img_w-20) or (h < 13 or h > 100):
+            continue
+
+        extension_down = y+h+5 if y+h+5<img_h else y+h
+        extension_up = y-10 if y-10>=0 else 0
+        rois.append(img[extension_up:extension_down, x:x+w])
+        # cv2.rectangle(img, (x, y), (x + w, y + h), (36, 255, 12), 2)  # display cnt
+        # cv2.imshow("roi", rois[-1])
+        # cv2.waitKey(0)
     return rois
 
 
