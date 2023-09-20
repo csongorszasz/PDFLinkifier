@@ -1,5 +1,5 @@
 # PDFLinkifier
-PDF formátumú kottás könyvekhez készít egy belső linkekkel ellátott tartalomjegyzéket, illetve kereshetővé teszi a dalok fejléceit (címeit)
+PDF formátumú kottás könyvekhez készít egy belső linkekkel ellátott tartalomjegyzéket, illetve kereshetővé teszi a dalokat cím szerint
 
 # Előfeltételek
 [Tesseract-OCR x64 5.3.1+](https://github.com/UB-Mannheim/tesseract/wiki)
