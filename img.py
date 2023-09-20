@@ -73,6 +73,8 @@ def resize_img_with_stretching_to_multiple_of_x(img, x: int):
 
 def img_contains_text(img):
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    # cv2.imshow("gray", img)
+    # cv2.waitKey(0)
     resized, ratio_w, ratio_h = resize_img_with_stretching_to_multiple_of_x(img, 32)
     # cv2.imshow("resized", resized)
 
