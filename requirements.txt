@@ -1,6 +1,8 @@
-PyQt5
-pyqtspinner
-pytesseract
-opencv-python
+PyQt5~=5.15.9
+pyqtspinner~=2.0.0
+pytesseract~=0.3.10
+opencv-python~=4.8.0.76
 PyMuPDF
-numpy
+numpy~=1.25.2
+imutils~=0.5.4
+winotify~=1.1.0
