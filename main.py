@@ -6,6 +6,7 @@ from pyqtspinner import WaitingSpinner
 import sys
 import os.path
 from winotify import Notification, audio
+import logging
 
 import linkifier
 import worker
@@ -104,7 +105,7 @@ class MainWindow(QMainWindow):
         self.print_to_statusbar("Siker!", color="green", hold_time=10000)
         toast = Notification(
             app_id='PDFLinkifier',
-            title='A fájlok feldolgozása sikeresen befejeződött',
+            title='A fájlok feldolgozása sikeresen befejeződött.',
             msg='',
             duration='long'
         )
@@ -114,6 +115,8 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename="events.log", level=logging.INFO, format="%(asctime)s %(levelname)s:%(message)s")
+
     app = QApplication([])
     window = MainWindow()
     app.exec_()

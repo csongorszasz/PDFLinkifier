@@ -4,6 +4,7 @@ import fitz
 import numpy as np
 import math
 import unicodedata
+import logging
 
 import my
 
@@ -35,13 +36,13 @@ def add_contents_page_to_doc(doc, titles: list[tuple[int, str]]):
         page = toc_stripped[i][1]
         toc_final.append([1, title, page])
     doc.set_toc(toc=toc_final, collapse=0)
-    print(f"Table of contents added")
+    logging.info("Table of contents added")
 
 
 def add_title_to_doc(doc, page_num: int, title: str):
     page = doc[page_num]
     page.insert_text(fitz.Point(30, 30), strip_accents(title), overlay=False)
-    print(f"Title added to page {page_num+1}: '{title}'")
+    logging.info(f"Title added to page {page_num+1}: '{title}'")
 
 
 def add_titles_to_doc(doc, titles: list[tuple[int, str]]):
@@ -61,7 +62,7 @@ def gather_titles(doc) -> list[tuple[int, str]]:
         for title in titles_results:
             title = title[0].upper() + title[1:]
             titles.append((page.number, title))
-            print(f"OCR: {title}")
+            logging.info(f"OCR (page {page.number}): {title}")
 
         # cv2.imshow("img", img)
         # cv2.waitKey(0)
@@ -95,15 +96,18 @@ def linkify(filepath: str):
     init_tesseract()
 
     doc = fitz.open(filepath, filetype='.pdf')  # open the pdf
-    print(f"> Opened file: {filepath}")
+    logging.info(f"Opened file: {filepath}")
 
     try:
         titles = gather_titles(doc)
         add_titles_to_doc(doc, titles)
         add_contents_page_to_doc(doc, titles)
     except:
-        print("> Error: Something went wrong")
+        logging.error("Something went wrong")
         pass
 
-    doc.save(f"{filepath[:-4]}-feldolgozott.pdf")  # save the modified pdf with a suffix
+    new_filename = f"{filepath[:-4]}-feldolgozott.pdf"
+    doc.save(new_filename)  # save the modified pdf with a suffix
+    logging.info(f"Created file: {new_filename}")
+
     doc.close()  # close the pdf
