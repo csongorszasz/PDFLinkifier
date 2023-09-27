@@ -1,9 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox
 from PyQt5 import uic
-from PyQt5.Qt import QColor, QThread
-from PyQt5 import QtCore
+from PyQt5.Qt import QColor, QThread, QPoint, QFont
+from PyQt5.QtCore import Qt
 from pyqtspinner import WaitingSpinner
 import sys
+import os.path
+from winotify import Notification, audio
 
 import linkifier
 import worker
@@ -37,6 +39,10 @@ class MainWindow(QMainWindow):
         self.ok_button.clicked.connect(self.ok_button_pressed)
 
         self.chosen_files = []
+        self.current_dir = ""
+        # self.chosen_files = ['C:\GitHub\PDFLinkifier\samples\csalamade.pdf']
+        # self.update_gui_begin_processing()
+        # self.process_files()
 
         self.show()
 
@@ -45,7 +51,10 @@ class MainWindow(QMainWindow):
         filepaths = QFileDialog.getOpenFileNames(self, "Fájlok kiválasztása", "", "PDF (*.pdf)")
         for filepath in filepaths[0]:
             self.chosen_files.append(filepath)
-        self.browsed_filename_label.setText(f"{len(filepaths[0])} fájl")
+        nr_files = len(self.chosen_files)
+        if nr_files:
+            self.current_dir = os.path.dirname(self.chosen_files[0])
+        self.browsed_filename_label.setText(f"{nr_files} fájl")
 
     def ok_button_pressed(self):
         if len(self.chosen_files) == 0:
@@ -92,7 +101,16 @@ class MainWindow(QMainWindow):
         self.print_to_statusbar(f"{nr}/{len(self.chosen_files)} {get_filename_from_path(filepath)}", hold_time=0)
 
     def report_success(self):
-        self.print_to_statusbar("Siker!", color="green")
+        self.print_to_statusbar("Siker!", color="green", hold_time=10000)
+        toast = Notification(
+            app_id='PDFLinkifier',
+            title='A fájlok feldolgozása sikeresen befejeződött',
+            msg='',
+            duration='long'
+        )
+        toast.set_audio(audio.Default, loop=False)
+        toast.add_actions(label='Fájlok megtekintése', launch=self.current_dir)
+        toast.show()
 
 
 if __name__ == "__main__":
