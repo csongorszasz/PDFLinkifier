@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog,
 from PyQt5 import uic
 from PyQt5.Qt import QColor, QThread, QPoint, QFont, QAction, QIcon
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCloseEvent
 from pyqtspinner import WaitingSpinner
 import sys
 import os.path
@@ -45,11 +46,22 @@ class MainWindow(QMainWindow):
 
         self.chosen_files = []
         self.current_dir = ""
+        self.is_processing = False
         # self.chosen_files = ['C:\GitHub\PDFLinkifier\samples\csalamade.pdf']
         # self.update_gui_begin_processing()
         # self.process_files()
 
         self.show()
+
+    def closeEvent(self, a0: QCloseEvent) -> None:
+        if not self.is_processing:
+            a0.accept()
+            return
+
+        if QMessageBox.No == QMessageBox.warning(self, self.windowTitle(), "Biztosan ki szeretne lépni?", QMessageBox.Yes | QMessageBox.No):
+            a0.ignore()
+        else:
+            a0.accept()
 
     def browse_button_pressed(self):
         self.chosen_files = []
@@ -127,12 +139,14 @@ class MainWindow(QMainWindow):
         self.worker_obj.finished.connect(self.report_success)
         self.worker_obj.finished.connect(self.reset)
         self.worker_obj.progress.connect(self.report_progress)
+        self.is_processing = True
         self.worker_thr.start()
 
     def report_progress(self, nr, filepath):
         self.print_to_statusbar(f"{nr}/{len(self.chosen_files)} {get_filename_from_path(filepath)}", hold_time=0)
 
     def report_success(self):
+        self.is_processing = False
         self.print_to_statusbar("Siker!", color="green", hold_time=10000)
         toast = Notification(
             app_id='PDFLinkifier',
