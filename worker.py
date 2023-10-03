@@ -5,6 +5,7 @@ import linkifier
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int, str)
+    problem = pyqtSignal()
 
     def __init__(self, chosen_files: list):
         super().__init__()
@@ -14,6 +15,10 @@ class Worker(QObject):
         i = 1
         for file in self.chosen_files:
             self.progress.emit(i, file)
-            linkifier.linkify(file)
+            try:
+                linkifier.linkify(file)
+            except:
+                self.problem.emit()
+                return
             i += 1
         self.finished.emit()

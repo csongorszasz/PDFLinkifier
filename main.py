@@ -152,6 +152,7 @@ class MainWindow(QMainWindow):
         self.worker_obj.finished.connect(self.report_success)
         self.worker_obj.finished.connect(self.reset)
         self.worker_obj.progress.connect(self.report_progress)
+        self.worker_obj.problem.connect(self.report_problem)
         self.is_processing = True
         self.worker_thr.start()
 
@@ -170,6 +171,10 @@ class MainWindow(QMainWindow):
         toast.set_audio(audio.Default, loop=False)
         toast.add_actions(label='Fájlok megtekintése', launch=self.current_dir)
         toast.show()
+
+    def report_problem(self):
+        QMessageBox.critical(self, self.windowTitle(), "Hiba történt.", QMessageBox.Ok)
+        sys.exit()
 
 
 if __name__ == "__main__":
