@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox, QDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox, QDialog, QDialogButtonBox
 from PyQt5 import uic
 from PyQt5.Qt import QColor, QThread, QPoint, QFont, QAction, QIcon
 from PyQt5.QtCore import Qt
@@ -58,10 +58,23 @@ class MainWindow(QMainWindow):
             a0.accept()
             return
 
-        if QMessageBox.No == QMessageBox.warning(self, self.windowTitle(), "Biztosan ki szeretne lépni?", QMessageBox.Yes | QMessageBox.No):
-            a0.ignore()
-        else:
+        dlg = QMessageBox()
+        dlg.setIcon(QMessageBox.Warning)
+        dlg.setWindowTitle(self.windowTitle())
+        dlg.setText("Biztosan ki akar lépni?")
+        dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+        yes_button = dlg.button(QMessageBox.Yes)
+        yes_button.setText("Igen")
+        no_button = dlg.button(QMessageBox.No)
+        no_button.setText("Nem")
+
+        dlg.exec_()
+
+        if dlg.clickedButton() == yes_button:
             a0.accept()
+        else:
+            a0.ignore()
 
     def browse_button_pressed(self):
         self.chosen_files = []
