@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox, QDialog
 from PyQt5 import uic
-from PyQt5.Qt import QColor, QThread, QPoint, QFont
+from PyQt5.Qt import QColor, QThread, QPoint, QFont, QAction, QIcon
 from PyQt5.QtCore import Qt
 from pyqtspinner import WaitingSpinner
 import sys
@@ -39,6 +39,10 @@ class MainWindow(QMainWindow):
         self.browse_button.clicked.connect(self.browse_button_pressed)
         self.ok_button.clicked.connect(self.ok_button_pressed)
 
+        about_action = QAction(QIcon(), "Útmutató", self)
+        about_action.triggered.connect(self.show_about_dialog_action)
+        self.menuBar.addAction(about_action)
+
         self.chosen_files = []
         self.current_dir = ""
         # self.chosen_files = ['C:\GitHub\PDFLinkifier\samples\csalamade.pdf']
@@ -64,6 +68,31 @@ class MainWindow(QMainWindow):
             self.update_gui_begin_processing()
             self.process_files()
 
+    def show_about_dialog_action(self):
+        QMessageBox.about(
+            self,
+            "Útmutató",
+            """
+             <b>A program célja:</b>
+            <br>
+            <br>
+            PDF formátumú kottás könyvekhez készít egy belső linkekkel ellátott tartalomjegyzéket, illetve kereshetővé teszi a dalokat cím szerint.
+            <br>
+            <br>
+            A feldolgozott fájlok neve a <b><i>-feldolgozott</i></b> utótagot kapják, míg az eredeti fájl megmarad érintetlenül.
+            <br>
+            <br>
+            <b>Használat:</b>
+            <br>
+            <br>
+            A <b><i>Fájlok kiválasztása</i></b> gomb megnyomásával előugrik egy ablak, melyben kiválaszthatunk egy vagy több <b><i>.pdf</i></b> dokumentumot.
+            <br>
+            Ha sikerült kiválasztani a feldolgozni kívánt dokumentumokat, a <b><i>Fájlok kiválasztása</i></b> gomb mellet megjelenik, hogy hány fájl lett kiválasztva.
+            <br>
+            Az <b><i>OK</i></b> gomb megnyomásával elindíthatjuk a folyamatot, melynek befejeztéről értesít majd minket a rendszer.
+            """
+        )
+
     def print_to_statusbar(self, msg, color="black", hold_time=3000):
         """hold_time is in miliseconds"""
         self.statusBar().setStyleSheet(f"color: {color}")
@@ -74,6 +103,7 @@ class MainWindow(QMainWindow):
         self.centralWidget().setEnabled(False)
         self.ok_button.setStyleSheet("QPushButton { background-color: none; border: none; }")
         self.ok_button.setText("")
+        self.menuBar.setEnabled(False)
         self.spinner_linkify.start()
 
     def reset(self):
@@ -82,21 +112,22 @@ class MainWindow(QMainWindow):
         self.browsed_filename_label.setText("0 fájl")
         self.ok_button.setStyleSheet("")
         self.ok_button.setText("OK")
+        self.menuBar.setEnabled(True)
         self.centralWidget().setEnabled(True)
 
     def process_files(self):
-        self.thr = QThread()
+        self.worker_thr = QThread()
         self.worker_obj = worker.Worker(self.chosen_files)
-        self.worker_obj.moveToThread(self.thr)
+        self.worker_obj.moveToThread(self.worker_thr)
 
-        self.thr.started.connect(self.worker_obj.run)
-        self.thr.finished.connect(self.thr.deleteLater)
-        self.worker_obj.finished.connect(self.thr.quit)
+        self.worker_thr.started.connect(self.worker_obj.run)
+        self.worker_thr.finished.connect(self.worker_thr.deleteLater)
+        self.worker_obj.finished.connect(self.worker_thr.quit)
         self.worker_obj.finished.connect(self.worker_obj.deleteLater)
         self.worker_obj.finished.connect(self.report_success)
         self.worker_obj.finished.connect(self.reset)
         self.worker_obj.progress.connect(self.report_progress)
-        self.thr.start()
+        self.worker_thr.start()
 
     def report_progress(self, nr, filepath):
         self.print_to_statusbar(f"{nr}/{len(self.chosen_files)} {get_filename_from_path(filepath)}", hold_time=0)
