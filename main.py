@@ -170,7 +170,7 @@ class MainWindow(QMainWindow):
             self,
             "Útmutató",
             """
-             <b>A program célja:</b>
+            <b>A program célja:</b>
             <br>
             <br>
             PDF formátumú kottás könyvekhez készít egy belső linkekkel ellátott tartalomjegyzéket, illetve kereshetővé teszi a dalokat cím szerint.
@@ -187,6 +187,8 @@ class MainWindow(QMainWindow):
             Ha sikerült kiválasztani a feldolgozni kívánt dokumentumokat, a <b><i>Fájlok kiválasztása</i></b> gomb mellet megjelenik, hogy hány fájl lett kiválasztva.
             <br>
             Az <b><i>OK</i></b> gomb megnyomásával elindíthatjuk a folyamatot, melynek befejeztéről értesít majd minket a rendszer.
+            <br>
+            Futtatás közbeni háttérben történő eseményekért lásd az <b><i>events.log</b></i> fájlt. 
             """
         )
 
