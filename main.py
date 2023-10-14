@@ -3,10 +3,10 @@ import time
 import pytesseract
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox, QDialog, QDialogButtonBox
 from PyQt5 import uic
-from PyQt5.Qt import QColor, QThread, QPoint, QFont, QAction, QIcon
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCloseEvent
+from PyQt5.Qt import QColor, QThread, QPoint, QFont, QAction
+from PyQt5.QtGui import QCloseEvent, QIcon, QPixmap
 from pyqtspinner import WaitingSpinner
+
 import sys
 import os.path
 from winotify import Notification, audio
@@ -15,8 +15,10 @@ import requests
 import subprocess
 from pathlib import Path
 from os.path import exists
+import ctypes
 
 import worker
+import resources
 
 
 def get_filename_from_path(path):
@@ -41,8 +43,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        uic.loadUi("pdf-linkifier-v2.ui", self)
+        uic.loadUi("assets/pdflinkifier.ui", self)
+        self.setWindowIcon(QIcon(":/icons/app_icon.ico"))
+
+
         self.init_tesseract()
+
         self.spinner_linkify = create_spinner(self.ok_button)
 
         self.browse_button.clicked.connect(self.browse_button_pressed)
@@ -240,6 +246,7 @@ class MainWindow(QMainWindow):
             app_id='PDFLinkifier',
             title='A fájlok feldolgozása sikeresen befejeződött.',
             msg='',
+            icon=f"{os.path.abspath('assets/app_icon.ico')}",
             duration='long'
         )
         toast.set_audio(audio.Default, loop=False)

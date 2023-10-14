@@ -79,7 +79,7 @@ def img_contains_text(img):
     # cv2.imshow("resized", resized)
 
     layer_names = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
-    net = cv2.dnn.readNet("frozen_east_text_detection.pb")
+    net = cv2.dnn.readNet("assets/frozen_east_text_detection.pb")
 
     h, w = resized.shape[:2]
     blob = cv2.dnn.blobFromImage(resized, 1.0, (w, h), (123.68, 116.78, 103.94), swapRB=True, crop=False)
