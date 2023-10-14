@@ -11,3 +11,6 @@ Az <b><i>OK</i></b> gomb megnyomásával elindíthatjuk a folyamatot, melynek be
 A feldolgozott fájlok neve a <b><i>-feldolgozott</i></b> utótagot kapják, míg az eredeti fájl megmarad érintetlenül.
 <br>
 Futtatás közbeni háttérben történő eseményekért lásd az <b><i>events.log</b></i> fájlt. 
+
+## Előnézet
+![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/ffcc7e40-9467-40f0-93ee-55d8dfecf891)
