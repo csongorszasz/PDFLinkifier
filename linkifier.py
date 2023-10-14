@@ -1,3 +1,5 @@
+import sys
+
 import cv2
 import pytesseract
 import fitz
@@ -12,10 +14,6 @@ import my
 def strip_accents(s):
     nfkd_form = unicodedata.normalize('NFKD', s)
     return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
-
-
-def init_tesseract():
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def add_contents_page_to_doc(doc, titles: list[tuple[int, str]]):
@@ -93,8 +91,6 @@ def linkify(filepath: str):
     - create table of contents (outline)
     """
 
-    init_tesseract()
-
     doc = fitz.open(filepath, filetype='.pdf')  # open the pdf
     logging.info(f"Opened file: {filepath}")
 
@@ -103,8 +99,7 @@ def linkify(filepath: str):
         add_titles_to_doc(doc, titles)
         add_contents_page_to_doc(doc, titles)
     except:
-        logging.error("Something went wrong")
-        pass
+        raise
 
     new_filename = f"{filepath[:-4]}-feldolgozott.pdf"
     doc.save(new_filename)  # save the modified pdf with a suffix

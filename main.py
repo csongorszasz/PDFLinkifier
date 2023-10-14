@@ -1,3 +1,6 @@
+import time
+
+import pytesseract
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QStatusBar, QMessageBox, QDialog, QDialogButtonBox
 from PyQt5 import uic
 from PyQt5.Qt import QColor, QThread, QPoint, QFont, QAction, QIcon
@@ -8,8 +11,11 @@ import sys
 import os.path
 from winotify import Notification, audio
 import logging
+import requests
+import subprocess
+from pathlib import Path
+from os.path import exists
 
-import linkifier
 import worker
 
 
@@ -34,7 +40,9 @@ def create_spinner(parent=None, roundness=100.0, fade=30.0, radius=3, lines=125,
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+
         uic.loadUi("pdf-linkifier-v2.ui", self)
+        self.init_tesseract()
         self.spinner_linkify = create_spinner(self.ok_button)
 
         self.browse_button.clicked.connect(self.browse_button_pressed)
@@ -52,6 +60,70 @@ class MainWindow(QMainWindow):
         # self.process_files()
 
         self.show()
+
+    def init_tesseract(self):
+        try:
+            pytesseract.get_tesseract_version()
+            return
+        except pytesseract.TesseractNotFoundError:
+            pass
+        try:
+            pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+            pytesseract.get_tesseract_version()
+            return
+        except pytesseract.TesseractNotFoundError:
+            pass
+        try:
+            pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe'
+            pytesseract.get_tesseract_version()
+            return
+        except pytesseract.TesseractNotFoundError as e:
+            dlg = QMessageBox()
+            dlg.setIcon(QMessageBox.Warning)
+            dlg.setWindowTitle(self.windowTitle())
+            dlg.setText("Hiányzó modul: Tesseract-OCR.\nSzeretné telepíteni?")
+            dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+            yes_button = dlg.button(QMessageBox.Yes)
+            yes_button.setText("Igen")
+            no_button = dlg.button(QMessageBox.No)
+            no_button.setText("Nem")
+
+            dlg.exec_()
+
+            if dlg.clickedButton() == yes_button:
+                self.install_tesseract()
+            else:
+                sys.exit(1)
+
+    def install_tesseract(self):
+        QMessageBox.information(self, self.windowTitle(), "A letöltés befejeztével meg fog nyílni a telepítő.")
+        downloads_path = str(Path.home() / "Downloads")
+        installer_filename = "tesseract-ocr-w64-setup-5.3.3.20231005.exe"
+        installer_path = f"{downloads_path}\\{installer_filename}"
+        p = None
+
+        if exists(installer_path):
+            logging.info("Already downloaded")
+        else:
+            url = f"https://digi.bib.uni-mannheim.de/tesseract/{installer_filename}"
+            logging.info(f"Downloading {installer_filename} from {url}")
+            r = requests.get(url, allow_redirects=True)
+            open(installer_path, "wb").write(r.content)
+            logging.info(f"Download successful")
+
+        try:
+            logging.info(f"Installing Tesseract-OCR")
+            p = subprocess.check_call(installer_path, shell=True)
+        except Exception as e:
+            QMessageBox.critical(self, self.windowTitle(), f"Hiba történt:\n{e}", QMessageBox.Ok)
+            logging.error(f"Installation failed: {e}")
+            sys.exit(1)
+
+        logging.info(f"Installation successful")
+        QMessageBox.warning(self, self.windowTitle(), "Sikeres telepítés.\nA helyes működéshez a számítógép újraindítása szükséges.")
+        sys.exit(0)
+
 
     def closeEvent(self, a0: QCloseEvent) -> None:
         if not self.is_processing:
@@ -172,9 +244,10 @@ class MainWindow(QMainWindow):
         toast.add_actions(label='Fájlok megtekintése', launch=self.current_dir)
         toast.show()
 
-    def report_problem(self):
-        QMessageBox.critical(self, self.windowTitle(), "Hiba történt.", QMessageBox.Ok)
-        sys.exit()
+    def report_problem(self, exception: Exception):
+        QMessageBox.critical(self, self.windowTitle(), f"Hiba történt:\n{exception}", QMessageBox.Ok)
+        logging.error(f"Something went wrong: {exception}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
