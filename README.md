@@ -17,12 +17,15 @@ The app:
 <br>
 ![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/ffcc7e40-9467-40f0-93ee-55d8dfecf891)
 <br>
-![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/2d69205f-05dc-4ef3-ac10-8588f653cf38)
-<br>
 <br>
 Example page of a book with sheet music:
 <br>
 ![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/d9f22dec-1313-4bad-a8b8-a1b4a1db42e8)
+<br>
+<br>
+Running the app on the PDF given in the example:
+<br>
+![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/2d69205f-05dc-4ef3-ac10-8588f653cf38)
 <br>
 <br>
 Log file after running the app:
