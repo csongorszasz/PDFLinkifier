@@ -1,16 +1,16 @@
 # PDFLinkifier
-PDF formátumú kottás könyvekhez készít egy belső linkekkel ellátott tartalomjegyzéket, illetve kereshetővé teszi a dalokat cím szerint.
+Create table of contents with internal links for sheet music books given in PDF format and make the song titles searchable.
 
-## Útmutató
-A <b><i>Fájlok kiválasztása</i></b> gomb megnyomásával előugrik egy ablak, melyben kiválaszthatunk egy vagy több <b><i>.pdf</i></b> dokumentumot.
+## Guide
+Pressing the <b><i>Select Files</i></b> button will bring up a window where you can select one or more <b><i>.pdf</i></b> documents.
 <br>
-Ha sikerült kiválasztani a feldolgozni kívánt dokumentumokat, a <b><i>Fájlok kiválasztása</i></b> gomb mellet megjelenik, hogy hány fájl lett kiválasztva.
+Once you have selected the documents to process, the number of files selected is displayed next to the <b><i>Select Files</i></b> button.
 <br>
-Az <b><i>OK</i></b> gomb megnyomásával elindíthatjuk a folyamatot, melynek befejeztéről értesít majd minket a rendszer.
+Press <b><i>OK</i></b> to start the process, which will notify you when it is finished.
 <br>
-A feldolgozott fájlok neve a <b><i>-feldolgozott</i></b> utótagot kapják, míg az eredeti fájl megmarad érintetlenül.
+The processed files are named with the suffix <b><i>-processed</i></b>, while the original file remains untouched.
 <br>
-Futtatás közbeni háttérben történő eseményekért lásd az <b><i>events.log</b></i> fájlt. 
+See the <b><i>events.log</b></i> file for background events during the run.
 
-## Előnézet
+## Preview
 ![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/ffcc7e40-9467-40f0-93ee-55d8dfecf891)
