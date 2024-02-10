@@ -28,9 +28,9 @@ Running the app on the PDF given in the example:
 ![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/2d69205f-05dc-4ef3-ac10-8588f653cf38)
 <br>
 <br>
-Log file after running the app:
+Log file after running the app (OCR results):
 <br>
-![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/832e06e2-20da-41f0-9ece-1a4f85464190)
+![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/3f0d6519-7e89-4f8b-8e5c-d966a1c38e40)
 <br>
 <br>
 PDF with newly created table of contents and searchable text:
