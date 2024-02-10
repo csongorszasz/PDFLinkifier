@@ -33,7 +33,7 @@ Log file after running the app (OCR results):
 ![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/3f0d6519-7e89-4f8b-8e5c-d966a1c38e40)
 <br>
 <br>
-PDF with newly created table of contents and searchable text:
+The PDF with newly created table of contents and searchable text:
 <br>
 ![image](https://github.com/csongorszasz/PDFLinkifier/assets/75858356/ea02c08f-a6d1-4907-8c1e-7072f2147fd6)
 
