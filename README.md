@@ -1,4 +1,4 @@
-# PDFLinkifier
+# PDFLinkifier: automatic table of contents from images
 Create table of contents with internal links for books with sheet music given in PDF format and make the song titles searchable.
 
 ## Guide
